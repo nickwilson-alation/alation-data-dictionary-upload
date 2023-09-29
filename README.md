@@ -14,10 +14,10 @@ This Python script allows users to easily upload CSV files to Alation's Data Dic
 
 ### Arguments
 
-- `filename`: The name of the CSV file (located in `csv_upload_files/`)
-- `base_url`: Your Alation base URL
-- `object_type`: Object type - choose from "data", "schema", or "table"
-- `object_id`: Object ID (integer)
+- `--filename`: The name of the CSV file (located in `csv_upload_files/`)
+- `--base_url`: Your Alation base URL
+- `--object_type`: Object type - choose from "data", "schema", or "table"
+- `--object_id`: Object ID (integer)
 - `--token`: (Optional) Alation API token. Can also be set as an environment variable `ALATION_TOKEN`
 - `--overwrite_values`: (Optional) Boolean to overwrite values, defaults to False
 
@@ -25,13 +25,14 @@ This Python script allows users to easily upload CSV files to Alation's Data Dic
 
 Use the following format to run the script, replacing the placeholders with your actual values.
 
-`python {{script_name}} {{filename}} {{base_url}} {{object_type}} {{object_id}} --token {{your_token}} --overwrite_values {{True_or_False}}`
+`python {{script_name}} --filename {{filename}} --base-url {{base_url}} --object-type {{object_type}} --object-id {{object_id}} --token {{your_token}} --overwrite-values {{True_or_False}}`
 
 ### Example Command with Bogus Values
 
 Here’s an example command with made-up values to illustrate how to replace the placeholders.
 
-`python upload_to_alation.py myfile.csv alation.example.com data 123 --token abc123def456ghi789 --overwrite_values True`
+`python upload_to_alation.py --filename myfile.csv --base-url alation.example.com --object-type data --object-id 123 --token abc123def456ghi789 --overwrite-values True`
+
 
 ## Additional Information
 
