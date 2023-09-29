@@ -5,7 +5,7 @@ This Python script allows users to easily upload CSV files to Alation's Data Dic
 ## Requirements
 
 - Python
-- `requests` library (Install with `pip install requests`)
+- `requests` library (Install with `pip install -r requirements.txt`)
 
 ## Usage
 
@@ -25,13 +25,13 @@ This Python script allows users to easily upload CSV files to Alation's Data Dic
 
 Use the following format to run the script, replacing the placeholders with your actual values.
 
-`python {{script_name}} --filename {{filename}} --base-url {{base_url}} --object-type {{object_type}} --object-id {{object_id}} --token {{your_token}} --overwrite-values {{True_or_False}}`
+`python main.py --filename {{filename}} --base-url {{base_url}} --object-type {{object_type}} --object-id {{object_id}} --token {{your_token}} --overwrite-values {{True_or_False}}`
 
 ### Example Command with Bogus Values
 
 Here’s an example command with made-up values to illustrate how to replace the placeholders.
 
-`python upload_to_alation.py --filename myfile.csv --base-url alation.example.com --object-type data --object-id 123 --token abc123def456ghi789 --overwrite-values True`
+`python main.py --filename myfile.csv --base-url alation.example.com --object-type data --object-id 123 --token abc123def456ghi789 --overwrite-values True`
 
 
 ## Additional Information
