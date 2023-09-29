@@ -5,18 +5,18 @@ import requests
 import argparse
 
 def main():
-    def upload_csv(alation_domain, object_type, object_id, file_path, token, overwrite_values):
-        url = f"https://{alation_domain}/integration/v1/data_dictionary/{object_type}/{object_id}/upload/"
+    def upload_csv(base_url, object_type, object_id, filename, token, overwrite_values):
+        file_path = os.path.join("csv_upload_files", filename)  # Construct file path from filename
+        url = f"https://{base_url}/integration/v1/data_dictionary/{object_type}/{object_id}/upload/"
         headers = {"Authorization": f"Token {token}"}
 
         try:
             with open(file_path, "rb") as file:
-                files = {"file": (os.path.basename(file_path), file)}
+                files = {"file": (filename, file)}  # Using filename directly here
                 params = {"overwrite_values": overwrite_values}
                 response = requests.put(url, headers=headers, files=files, params=params)
 
-            response.raise_for_status()  # Raise an exception for HTTP errors
-
+            response.raise_for_status()  
             job = response.json()
             print("Upload job created:", job)
             return job['id']
@@ -26,9 +26,8 @@ def main():
             print(f"An error occurred: {err}")
             sys.exit(1)
 
-    # Function to check the status of the upload job
-    def check_job_status(alation_domain, task_id, token):
-        url = f"https://{alation_domain}/integration/v1/data_dictionary/tasks/{task_id}/"
+    def check_job_status(base_url, task_id, token):
+        url = f"https://{base_url}/integration/v1/data_dictionary/tasks/{task_id}/"
         headers = {"Authorization": f"Token {token}"}
         
         try:
@@ -51,7 +50,6 @@ def main():
             print(f"An error occurred: {err}")
             sys.exit(1)
 
-    # Updated command-line arguments setup
     parser = argparse.ArgumentParser(description="Upload CSV to Alation Data Dictionary")
     parser.add_argument("--filename", required=True, help="Filename of the CSV")
     parser.add_argument("--base-url", required=True, help="Alation base URL")
@@ -60,7 +58,6 @@ def main():
     parser.add_argument("--token", default=os.environ.get("ALATION_TOKEN", None), help="Alation API token")
     parser.add_argument("--overwrite-values", type=bool, default=False, help="Overwrite values")
 
-
     args = parser.parse_args()
 
     # Validate the token
@@ -68,15 +65,14 @@ def main():
         print("Please provide Alation API token either through --token option or ALATION_TOKEN environment variable.")
         sys.exit(1)
 
-    # Validate the file path
-    if not os.path.exists(args.file_path) or not os.path.isfile(args.file_path):
-        print(f"The file path '{args.file_path}' does not exist or is not a file.")
+    # Validate the file existence
+    if not os.path.exists(os.path.join("csv_upload_files", args.filename)):
+        print(f"The file '{args.filename}' does not exist in the 'csv_upload_files' directory.")
         sys.exit(1)
 
-    # Upload CSV and check job status
-    task_id = upload_csv(args.alation_domain, args.object_type, args.object_id, args.file_path, args.token, args.overwrite_values)
+    task_id = upload_csv(args.base_url, args.object_type, args.object_id, args.filename, args.token, args.overwrite_values)
     if task_id:
-        check_job_status(args.alation_domain, task_id, args.token)
+        check_job_status(args.base_url, task_id, args.token)
 
 if __name__ == "__main__":
     main()
