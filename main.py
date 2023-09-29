@@ -51,14 +51,15 @@ def main():
             print(f"An error occurred: {err}")
             sys.exit(1)
 
-    # Command-line arguments setup
+    # Updated command-line arguments setup
     parser = argparse.ArgumentParser(description="Upload CSV to Alation Data Dictionary")
-    parser.add_argument("file_path", help="Path to the CSV file")
-    parser.add_argument("alation_domain", help="Alation domain")
-    parser.add_argument("object_type", choices=["data", "schema", "table"], help="Object type")
-    parser.add_argument("object_id", type=int, help="Object ID")
+    parser.add_argument("--filename", required=True, help="Filename of the CSV")
+    parser.add_argument("--base-url", required=True, help="Alation base URL")
+    parser.add_argument("--object-type", required=True, choices=["data", "schema", "table"], help="Object type")
+    parser.add_argument("--object-id", required=True, type=int, help="Object ID")
     parser.add_argument("--token", default=os.environ.get("ALATION_TOKEN", None), help="Alation API token")
-    parser.add_argument("--overwrite_values", type=bool, default=False, help="Overwrite values")
+    parser.add_argument("--overwrite-values", type=bool, default=False, help="Overwrite values")
+
 
     args = parser.parse_args()
 
