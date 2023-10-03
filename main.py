@@ -8,6 +8,7 @@ from html import escape
 
 CSV_UPLOAD_FILES_PATH = "csv_upload_files"
 SANITIZED_FILE_PREFIX = "sanitized_"
+POLL_INTERVAL_IN_SECONDS = 2
 
 # Sanitizes HTML to work around a python-magic library issue on the backend
 def sanitize_html(text):
@@ -23,8 +24,8 @@ def upload_csv(base_url, object_type, object_id, filename, token, overwrite_valu
     try:
         with open(file_path, "rb") as file:
             files = {"file": (filename, file)}
-            params = {"overwrite_values": overwrite_values}
-            response = requests.put(url, headers=headers, files=files, params=params)
+            data = {"overwrite_values": overwrite_values}
+            response = requests.put(url, headers=headers, files=files, json=data)
         response.raise_for_status()
         job = response.json()
         print("Upload job created:", job)
@@ -53,7 +54,7 @@ def check_job_status(base_url, task_id, token):
                 return job_status
             elif job_status['state'] == "PROCESSING":
                 print("Progress:", job_status['progress']['number_of_batches_completed'], "/", job_status['progress']['total_number_of_batches'])
-                time.sleep(5)
+                time.sleep(POLL_INTERVAL_IN_SECONDS)
     except requests.HTTPError as err:
         print(f"HTTP error occurred: {err}")
     except Exception as err:
