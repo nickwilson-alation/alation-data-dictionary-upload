@@ -7,6 +7,7 @@ import pandas as pd
 from html import escape
 
 CSV_UPLOAD_FILES_PATH = "csv_upload_files"
+SANITIZED_FILE_PREFIX = "sanitized_"
 
 # Sanitizes HTML to work around a python-magic library issue on the backend
 def sanitize_html(text):
@@ -15,7 +16,7 @@ def sanitize_html(text):
     return escape(text)
 
 def upload_csv(base_url, object_type, object_id, filename, token, overwrite_values):
-    file_path = os.path.join(CSV_UPLOAD_FILES_PATH, filename)  # Construct file path from filename
+    file_path = os.path.join(CSV_UPLOAD_FILES_PATH, SANITIZED_FILE_PREFIX + filename)  # Construct file path from filename
     url = f"https://{base_url}/integration/v1/data_dictionary/{object_type}/{object_id}/upload/"
     headers = {"TOKEN": token}
 
@@ -80,7 +81,7 @@ def main():
     if os.path.exists(file_path):
         # Sanitize the CSV and create a new sanitized file for uploading 
         original_file_path = os.path.join(CSV_UPLOAD_FILES_PATH, args.filename) 
-        sanitized_file_path = os.path.join(CSV_UPLOAD_FILES_PATH, "sanitized_" + args.filename) 
+        sanitized_file_path = os.path.join(CSV_UPLOAD_FILES_PATH, SANITIZED_FILE_PREFIX + args.filename) 
         df = pd.read_csv(original_file_path, dtype=str) 
         df = df.applymap(lambda x: sanitize_html(x) if isinstance(x, str) else x) 
         df.to_csv(sanitized_file_path, index=False)
