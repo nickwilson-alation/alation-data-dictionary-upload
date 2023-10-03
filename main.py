@@ -25,7 +25,7 @@ def upload_csv(base_url, object_type, object_id, filename, token, overwrite_valu
         response.raise_for_status()
         job = response.json()
         print("Upload job created:", job)
-        return job['task']['id'] 
+        return job['task']['id']
     except requests.HTTPError as err:
         print(f"HTTP error occurred: {err}")
         print(f"Response text: {err.response.text}")  # This will provide more detail on the error
@@ -36,7 +36,7 @@ def upload_csv(base_url, object_type, object_id, filename, token, overwrite_valu
 def check_job_status(base_url, task_id, token):
     url = f"https://{base_url}/integration/v1/data_dictionary/tasks/{task_id}"
     headers = {"TOKEN": token}
-    
+
     try:
         while True:
             response = requests.get(url, headers=headers)
@@ -44,7 +44,7 @@ def check_job_status(base_url, task_id, token):
 
             job_status = response.json()
             print("Job Status:", job_status['state'], "-", job_status['status'] if 'status' in job_status else "")
-            
+
             if job_status['state'] == "COMPLETED":
                 print("Job completed.")
                 return job_status
@@ -73,8 +73,13 @@ def main():
         print("Please provide Alation API token either through --token option or ALATION_TOKEN environment variable.")
         sys.exit(1)
 
-    # Validate the file existence
-    if not os.path.exists(os.path.join("csv_upload_files", args.filename)):
+    # Validate the file existence and sanitize HTML before uploading
+    file_path = os.path.join("csv_upload_files", args.filename)
+    if os.path.exists(file_path):
+        df = pd.read_csv(file_path, dtype=str)
+        df = df.applymap(lambda x: sanitize_html(x) if isinstance(x, str) else x) 
+        df.to_csv(file_path, index=False)
+    else:
         print(f"The file '{args.filename}' does not exist in the 'csv_upload_files' directory.")
         sys.exit(1)
 
