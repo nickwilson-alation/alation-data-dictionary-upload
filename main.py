@@ -3,6 +3,13 @@ import sys
 import time
 import requests
 import argparse
+import pandas as pd
+from html import escape
+
+def sanitize_html(text):
+    if pd.isna(text):
+        return text
+    return escape(text)
 
 def main():
     def upload_csv(base_url, object_type, object_id, filename, token, overwrite_values):
@@ -12,13 +19,9 @@ def main():
 
         try:
             with open(file_path, "rb") as file:
-                print(f"Uploading file: {file_path}")  # Printing the file path being used
-                print(f"File type: {'text/csv'}")  # Printing the file type
-                
-                files = {"file": (filename, file, 'text/csv')}  # Explicitly setting the content type to text/csv
+                files = {"file": (filename, file)}
                 params = {"overwrite_values": overwrite_values}
                 response = requests.put(url, headers=headers, files=files, params=params)
-
             response.raise_for_status()
             job = response.json()
             print("Upload job created:", job)
