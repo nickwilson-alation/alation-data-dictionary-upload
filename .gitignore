@@ -1,5 +1,6 @@
-# CSV files for upload should not be committed
+# CSV files for upload, and downloaded reports should not be committed
 csv_upload_files/
+reports/
 
 # Ignore DS Store
 **/.DS_Store
