@@ -92,7 +92,6 @@ def main():
         df = lowercase_headers(df)
         df = df.applymap(lambda x: sanitize_html(x) if isinstance(x, str) else x) 
         df.to_csv(sanitized_file_path, index=False, quoting=3)  # Quoting=3 ensures all field values are surrounded by quotes
-
     else:
         print(f"The file '{args.filename}' does not exist in the '{CSV_UPLOAD_FILES_PATH}' directory.")
         sys.exit(1)
