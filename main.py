@@ -6,8 +6,8 @@ import argparse
 import pandas as pd
 from html import escape
 
-CSV_UPLOAD_FILES_PATH = "csv_upload_files" # Don't change me unless you update .gitignore
-REPORT_FILES_PATH = "reports" # Don't change me unless you update .gitignore
+CSV_UPLOAD_FILES_PATH = "csv_upload_files" # Don't change me unless you add a .gitignore to this dir
+REPORT_FILES_PATH = "reports" # Don't change me unless you add a .gitignore to this dir
 SANITIZED_FILE_PREFIX = "sanitized_"
 POLL_INTERVAL_IN_SECONDS = 2
 
