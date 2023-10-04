@@ -16,6 +16,11 @@ def sanitize_html(text):
         return text
     return escape(text)
 
+# Lowercases all the headers in the DataFrame to work around mixed-case-sensitive backend
+def lowercase_headers(df):
+    df.columns = [col.lower() for col in df.columns]
+    return df
+
 def upload_csv(base_url, object_type, object_id, filename, token, overwrite_values):
     file_path = os.path.join(CSV_UPLOAD_FILES_PATH, SANITIZED_FILE_PREFIX + filename)  # Construct file path from filename
     url = f"https://{base_url}/integration/v1/data_dictionary/{object_type}/{object_id}/upload/"
@@ -84,10 +89,9 @@ def main():
         original_file_path = os.path.join(CSV_UPLOAD_FILES_PATH, args.filename) 
         sanitized_file_path = os.path.join(CSV_UPLOAD_FILES_PATH, SANITIZED_FILE_PREFIX + args.filename) 
         df = pd.read_csv(original_file_path, dtype=str) 
+        df = lowercase_headers(df)
         df = df.applymap(lambda x: sanitize_html(x) if isinstance(x, str) else x) 
-        df.to_csv(sanitized_file_path, index=False)
-
-
+        df.to_csv(sanitized_file_path, index=False, quoting=3)  # Quoting=3 ensures all field values are surrounded by quotes
     else:
         print(f"The file '{args.filename}' does not exist in the '{CSV_UPLOAD_FILES_PATH}' directory.")
         sys.exit(1)
