@@ -39,3 +39,13 @@ Here’s an example command with made-up values to illustrate how to replace the
 This script simplifies the process of uploading CSV files to the Alation Data Dictionary. Make sure to follow the argument guidelines and replace the placeholders with your specific information. Always ensure the CSV files are placed in the `csv_upload_files/` directory, which is ignored by Git for user privacy and security.
 
 For any further queries or issues, please refer to the official Alation API documentation or contact support.
+
+## Disclaimer
+
+This project and all the code contained within this repository is provided "as is" without warranty of any kind, either expressed or implied, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose. The entire risk as to the quality and performance of the project is with you.
+
+The author, including Alation, shall not be responsible for any damages whatsoever, including direct, indirect, special, incidental, or consequential damages, arising out of or in connection with the use or performance of this project, even if advised of the possibility of such damages.
+
+Please understand that this project is provided for educational and informational purposes only. Always ensure proper testing, validation and backup before implementing any code or program in a production environment.
+
+By using this project, you accept full responsibility for any and all risks associated with its usage.
