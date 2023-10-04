@@ -4,7 +4,6 @@ import time
 import requests
 import argparse
 import pandas as pd
-from bs4 import BeautifulSoup
 from html import escape
 
 CSV_UPLOAD_FILES_PATH = "csv_upload_files"
@@ -15,13 +14,7 @@ POLL_INTERVAL_IN_SECONDS = 2
 def sanitize_html(text):
     if pd.isna(text):
         return text
-    soup = BeautifulSoup(text, "html.parser")
-    return escape(soup.get_text()) if soup.find() else text
-
-# Lowercases all the headers in the DataFrame to work around mixed-case-sensitive backend
-def lowercase_headers(df):
-    df.columns = [col.lower() for col in df.columns]
-    return df
+    return escape(text)
 
 def upload_csv(base_url, object_type, object_id, filename, token, overwrite_values):
     file_path = os.path.join(CSV_UPLOAD_FILES_PATH, SANITIZED_FILE_PREFIX + filename)  # Construct file path from filename
@@ -90,10 +83,11 @@ def main():
         # Sanitize the CSV and create a new sanitized file for uploading 
         original_file_path = os.path.join(CSV_UPLOAD_FILES_PATH, args.filename) 
         sanitized_file_path = os.path.join(CSV_UPLOAD_FILES_PATH, SANITIZED_FILE_PREFIX + args.filename) 
-        df = pd.read_csv(original_file_path, dtype=str)
-        df = lowercase_headers(df)
+        df = pd.read_csv(original_file_path, dtype=str) 
         df = df.applymap(lambda x: sanitize_html(x) if isinstance(x, str) else x) 
-        df.to_csv(sanitized_file_path, index=False, quoting=3)  # Quoting=3 ensures all field values are surrounded by quotes
+        df.to_csv(sanitized_file_path, index=False)
+
+
     else:
         print(f"The file '{args.filename}' does not exist in the '{CSV_UPLOAD_FILES_PATH}' directory.")
         sys.exit(1)
