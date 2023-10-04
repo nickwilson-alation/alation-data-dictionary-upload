@@ -25,7 +25,7 @@ def upload_csv(base_url, object_type, object_id, filename, token, overwrite_valu
         with open(file_path, "rb") as file:
             files = {"file": (filename, file)}
             data = {"overwrite_values": overwrite_values}
-            response = requests.put(url, headers=headers, files=files, json=data)
+            response = requests.put(url, headers=headers, files=files, data=data)
         response.raise_for_status()
         job = response.json()
         print("Upload job created:", job)
