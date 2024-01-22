@@ -1,4 +1,4 @@
-# NOTE - This repo is no longer maintained as of January 2024.
+# ⚠️ This repo is no longer maintained as of January 2024. ⚠️
 
 This repo was created as a workaround for a bug, but is no longer relevant as the bug has been resolved in the latest versions of Alation. This script is untested against newer versions of Alation.
 
